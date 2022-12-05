@@ -1,3 +1,0 @@
-{Doll=200}
-{Ball=50}
-{Transformer=300}

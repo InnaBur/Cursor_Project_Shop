@@ -1,6 +1,6 @@
 package com.cursor.project.shop;
 
-public class People {
+public abstract class People {
 
     private String name;
     private String lastName;
@@ -22,4 +22,9 @@ public class People {
     public String getPassword() {
         return password;
     }
+
+
+    public abstract void showMenu(Admin admin);
+
+    public abstract void showMenu(User user);
 }

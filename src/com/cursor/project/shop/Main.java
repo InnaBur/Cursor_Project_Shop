@@ -1,11 +1,7 @@
 package com.cursor.project.shop;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.io.*;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -16,22 +12,23 @@ public class Main {
 
         // map for the products with prices
         Map<String, Integer> productsData = new HashMap<>();
+        Map<String, String> toysData = new HashMap<>();
+        Map<String, String> booksData = new HashMap<>();
 
         Admin admin = new Admin();
+        Toy toy = new Toy();
+        Book book = new Book();
+        User user = new User();
         System.out.println("Admin: " + admin.getNickname());
-        
-        
-        System.out.println("Hi, there! Make your choice! If you want to register new user press 1 " +
-                "\n If you want to login - press 2 " +
-                "\n If you want to login as admin - press 3!" +
-                "\n If you want to exit - press 4!");
 
-        makeChoice(usersData, usersDataNick, admin);
+
+        user.showStartMenu();
+
+        makeChoice(usersData, usersDataNick, admin, toysData, booksData);
 
         // printing all users list
         System.out.println(usersData);
         System.out.println("You press any key or exit! See you next time!");
-
 
 
     }
@@ -43,8 +40,9 @@ public class Main {
      * @param usersData     - database for finding by id
      * @param usersDataNick - database for login user
      */
-    private static void makeChoice(Map<UUID, User> usersData, Map<String, String> usersDataNick, Admin admin) throws IOException {
-        FileWriter fileWriter = null;
+    private static void makeChoice(Map<UUID, User> usersData, Map<String, String> usersDataNick,
+                                   Admin admin, Map<String, String> toysData, Map<String, String> booksData) throws IOException {
+
         Scanner scanner = new Scanner(System.in);
         int num;
         User user = null;
@@ -65,7 +63,7 @@ public class Main {
                         System.out.println("User is already exist! Try once more!");
                         break;
                     }
-                    
+
                 case 2:
                     try {
                         loginUserOrAdmin(usersDataNick, admin, user);
@@ -79,7 +77,7 @@ public class Main {
                 case 3:
                     try {
                         loginUserOrAdmin(usersDataNick, admin, user);
-                        addAdminMenu(admin);
+                        addAdminMenu(admin, user, admin.toy, admin.book, toysData, booksData);
                         break;
                     } catch (UserNameOrPasswIsWrong e) {
                         System.out.println("" + e.getMessage());
@@ -91,25 +89,70 @@ public class Main {
                     System.out.println("Incorrect choice! Good luck next time you run the program");
                     System.exit(0);
             }
-            System.out.println("Make your choice! If you want to register new user press 1 " +
-                    "\n If you want to login - press 2 " +
-                    "\n If you want to login as admin - press 3!" +
-                    "\n If you want to exit - press 4!");
+            user.showStartMenu();
         }
     }
 
-    private static void addAdminMenu(Admin admin) {
-        System.out.println("Ammin menu!!!!!");
+    private static void addAdminMenu(Admin admin, User user, Toy toy, Book book,
+                                     Map<String, String> toysData, Map<String, String> booksData) throws IOException {
+        int num;
+        Scanner scanner = new Scanner(System.in);
+        admin.showMenu(admin);
+
+        while (scanner.hasNextInt()) {
+
+            num = scanner.nextInt();
+
+            switch (num) {
+                case 1:
+
+                    /* reading txt file with toys database into a map
+                     * which will be supplemented with products that will be provided by the admin
+                     */
+                    readFileToysData(toysData);
+
+                    admin.addToy();
+                    toysData.put(toy.getName(), toy.getPrice());
+                    System.out.println("Toys data: " + toysData.toString());
+                    break;
+                case 2:
+                    admin.blockUser(user);
+                    break;
+                case 3:
+                case 4:
+                case 5:
+            }
+            admin.showMenu(admin);
+        }
+    }
+
+    /** In the method we read file with the name and the price of product (toy)
+     *
+     * @param toysData - into this collection data from the file is reading
+     */
+    private static void readFileToysData(Map<String, String> toysData) {
+        String line;
+        // adding the words and digits into array
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("file/Products.txt"));
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split(" ");
+                String name = words[0]; // the name
+                String price = words[1];
+                toysData.put(name, price);
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(("File is not found " + e.getMessage()));
+        } catch (IOException e) {
+            System.out.println(("Something went wrong " + e.getMessage()));
+        }
     }
 
     private static void addUserMenu(User user) {
         int num;
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Make your choice! If you want to see products list - press 1 " +
-                "\n If you want to find the product - press 2 " +
-                "\n If you want to add the product into your order - press 3!" +
-                "\n If you want to remove the product from your order - press 4" +
-                "\n If you want to see your order - press 5!");
+        user.showMenu(user);
 
         while (scanner.hasNextInt()) {
 
@@ -155,7 +198,7 @@ public class Main {
         String passw = pas.nextLine();
 
         if ((usersDataNick.containsKey(name)) && (usersDataNick.containsValue(passw))) {
-            System.out.println(user.getNickname()+ " You are logging! Congrats!");
+            System.out.println(user.getNickname() + " You are logging! Congrats!");
         } else if ((admin.getNickname().equals(name)) && (admin.getPassword().equals(passw))) {
             System.out.println(admin.getNickname() + " Admin! You are logging! Congrats!");
         } else {

@@ -10,9 +10,13 @@ public class User extends People {
     private String password;
 
     private String name;
-
     private String lastName;
 
+    private boolean isBlocked;
+
+    public boolean isBlocked() {
+        return isBlocked = true;
+    }
 
     @Override
     public String getName() {
@@ -37,10 +41,24 @@ public class User extends People {
         return password;
     }
 
+    @Override
+    public void showMenu(Admin admin) {
+
+    }
+
+    @Override
+    public void showMenu(User user) {
+        System.out.println("Make your choice! If you want to see products list - press 1 " +
+                "\n If you want to find the product - press 2 " +
+                "\n If you want to add the product into your order - press 3!" +
+                "\n If you want to remove the product from your order - press 4" +
+                "\n If you want to see your order - press 5!");
+    }
+
     public void addUser() {
 
         String[] array = new String[4];
-        for(int i = 0; i < 1; i++) {
+        for (int i = 0; i < 1; i++) {
             switch (i) {
                 case (0):
                     Scanner username = new Scanner(System.in);
@@ -69,8 +87,15 @@ public class User extends People {
         this.password = array[1];
         this.name = array[2];
         this.lastName = array[3];
+        this.isBlocked = false;
 
 
+    }
 
+    public void showStartMenu() {
+        System.out.println("Hi, there! Make your choice! If you want to register new user press 1 " +
+                "\n If you want to login - press 2 " +
+                "\n If you want to login as admin - press 3!" +
+                "\n If you want to exit - press 4!");
     }
 }

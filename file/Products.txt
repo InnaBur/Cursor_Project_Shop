@@ -1,0 +1,8 @@
+Doll 200
+Ball 50
+Transformer 300
+Kitten 100
+Lol 600
+TeddyBear 150
+Kitchen 1500
+DollHouse 2500

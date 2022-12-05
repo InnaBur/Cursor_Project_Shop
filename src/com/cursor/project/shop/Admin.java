@@ -7,6 +7,9 @@ import java.util.Scanner;
 public class Admin extends People {
 
     Product product = new Product();
+    Toy toy = new Toy();
+    Book book = new Book();
+    User user = new User();
 
     @Override
     public String getNickname() {
@@ -20,27 +23,42 @@ public class Admin extends People {
 
     Map<String, Integer> productsData = new HashMap<>();
 
-    public void addProduct() {
+    public void addToy() {
 
         Scanner scanner = new Scanner(System.in);
-        //String[] array = new String[2];
-        while (scanner.hasNextInt()) {
 
-            // int num = scanner.nextInt();
-            // switch (num) {
-            //  case (1):
+        while (scanner.hasNextInt()) {
             Scanner productData = new Scanner(System.in);
             System.out.println("Input product name: ");
             String p = productData.nextLine();
-            product.name = p;
+            toy.name = p;
             //   case (2):
             Scanner productPrice = new Scanner(System.in);
             System.out.println("Input product price: ");
-            int pr = Integer.parseInt(productPrice.nextLine());
-            product.price = pr;
-
-
+            String pr = productPrice.nextLine();
+            toy.price = pr;
+            break;
         }
 
     }
+    
+    public void blockUser(User user) {
+        user.isBlocked();
+        System.out.println(user.getNickname() + " is blocked");
+    }
+
+    @Override
+    public void showMenu(Admin admin) {
+        System.out.println(admin.getNickname() + " Make your choice! If you want to add product to the list - press 1 " +
+                "\n If you want to block user - press 2 " +
+                "\n If you want to unblock user - press 3!" +
+                "\n If you want to confirm order - press 4");
+    }
+
+    @Override
+    public void showMenu(User user) {
+
+    }
+
+
 }
