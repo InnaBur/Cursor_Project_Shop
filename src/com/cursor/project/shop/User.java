@@ -12,7 +12,7 @@ public class User extends People {
     private String name;
     private String lastName;
 
-    private boolean isBlocked;
+    private boolean isBlocked = false;
 
     public boolean isBlocked() {
         return isBlocked = true;
@@ -93,7 +93,7 @@ public class User extends People {
     }
 
     public void showStartMenu() {
-        System.out.println("Hi, there! Make your choice! If you want to register new user press 1 " +
+        System.out.println("Hi, there! Welcome to the toy store! \n Make your choice! If you want to register new user press 1 " +
                 "\n If you want to login - press 2 " +
                 "\n If you want to login as admin - press 3!" +
                 "\n If you want to exit - press 4!");

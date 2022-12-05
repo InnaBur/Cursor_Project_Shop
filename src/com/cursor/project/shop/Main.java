@@ -77,7 +77,7 @@ public class Main {
                 case 3:
                     try {
                         loginUserOrAdmin(usersDataNick, admin, user);
-                        addAdminMenu(admin, user, admin.toy, admin.book, toysData, booksData);
+                        addAdminMenu(admin, user, admin.toy, admin.book, toysData, booksData, usersDataNick);
                         break;
                     } catch (UserNameOrPasswIsWrong e) {
                         System.out.println("" + e.getMessage());
@@ -89,12 +89,12 @@ public class Main {
                     System.out.println("Incorrect choice! Good luck next time you run the program");
                     System.exit(0);
             }
-            user.showStartMenu();
+            user.showMenu(user);
         }
     }
 
     private static void addAdminMenu(Admin admin, User user, Toy toy, Book book,
-                                     Map<String, String> toysData, Map<String, String> booksData) throws IOException {
+                                     Map<String, String> toysData, Map<String, String> booksData, Map<String, String> usersDataNick) throws IOException {
         int num;
         Scanner scanner = new Scanner(System.in);
         admin.showMenu(admin);
@@ -116,7 +116,7 @@ public class Main {
                     System.out.println("Toys data: " + toysData.toString());
                     break;
                 case 2:
-                    admin.blockUser(user);
+                    admin.blockUser(user, usersDataNick);
                     break;
                 case 3:
                 case 4:
@@ -126,7 +126,8 @@ public class Main {
         }
     }
 
-    /** In the method we read file with the name and the price of product (toy)
+    /**
+     * In the method we read file with the name and the price of product (toy)
      *
      * @param toysData - into this collection data from the file is reading
      */
@@ -168,16 +169,11 @@ public class Main {
         }
     }
 
-    private static void addUserIntoCollection(User user, Map<UUID, User> usersData, Map<String, String> usersDataNick) throws IOException {
-        FileWriter fileWriter;
+    private static void addUserIntoCollection(User user, Map<UUID, User> usersData, Map<String, String> usersDataNick) {
+
         usersData.put(user.getId(), user);
         usersDataNick.put(user.getUsername(), user.getPassword());
-
-        fileWriter = new FileWriter("Users.txt");
-        fileWriter.write(usersDataNick.toString() + user.getId());
-        fileWriter.close();
-
-        System.out.println(user.getNickname() + "! You are registered!");
+        System.out.println(user.getName() + "! You are registered!");
 
     }
 
@@ -197,8 +193,10 @@ public class Main {
         Scanner pas = new Scanner(System.in);
         String passw = pas.nextLine();
 
-        if ((usersDataNick.containsKey(name)) && (usersDataNick.containsValue(passw))) {
+        if ((usersDataNick.containsKey(name)) && (usersDataNick.containsValue(passw)) && (!user.isBlocked())) {
             System.out.println(user.getNickname() + " You are logging! Congrats!");
+        } else if (!user.isBlocked()) {
+            System.out.println(user.getName() + " You are blocked!");
         } else if ((admin.getNickname().equals(name)) && (admin.getPassword().equals(passw))) {
             System.out.println(admin.getNickname() + " Admin! You are logging! Congrats!");
         } else {
@@ -208,20 +206,7 @@ public class Main {
 
     }
 
-    /**
-     * The method allows to find user by id
-     *
-     * @param usersData -  database where the key is user id
-     * @param k         - is value from user input
-     * @throws UserIsNotFoundException - the exception
-     */
-    private static void findUserById(Map<UUID, User> usersData, String k) throws UserIsNotFoundException {
-        if ((!usersData.isEmpty()) && (usersData.containsKey(k))) {
-            System.out.println("Find user for id! The user is: " + usersData.get(k).getName());
-        } else {
-            throw new UserIsNotFoundException("There is not user with this ID!");
-        }
-    }
+
 }
 
 

@@ -42,17 +42,29 @@ public class Admin extends People {
 
     }
     
-    public void blockUser(User user) {
-        user.isBlocked();
-        System.out.println(user.getNickname() + " is blocked");
+    public void blockUser(User user, Map<String, String> usersDataNick) {
+        Scanner name = new Scanner(System.in);
+        System.out.println("Input users nickname to block user: ");
+        String n = name.nextLine();
+        Scanner passw = new Scanner(System.in);
+        System.out.println("Input users password to block user: ");
+        String p = passw.nextLine();
+        if (((usersDataNick.containsKey(n)) && (usersDataNick.containsValue(p)))) {
+            user.isBlocked();
+            System.out.println(user.getNickname() + " is blocked");
+        } else {
+            System.out.println("There isn`t this user in database!");
+        }
+
+
     }
 
     @Override
     public void showMenu(Admin admin) {
         System.out.println(admin.getNickname() + " Make your choice! If you want to add product to the list - press 1 " +
                 "\n If you want to block user - press 2 " +
-                "\n If you want to unblock user - press 3!" +
-                "\n If you want to confirm order - press 4");
+                "\n If you want to unblock user - press 3" +
+                "\n If you want to confirm order - press 4!");
     }
 
     @Override
