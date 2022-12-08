@@ -6,16 +6,20 @@ import java.util.UUID;
 public class User extends People {
 
     private UUID id = UUID.randomUUID();
-    private String username;
+    private String nickname;
     private String password;
 
     private String name;
     private String lastName;
 
-    private boolean isBlocked = false;
+    private boolean isBlocked;
 
     public boolean isBlocked() {
-        return isBlocked = true;
+        return isBlocked;
+    }
+
+    public boolean replaceIsBlocked() {
+        return true;
     }
 
     @Override
@@ -32,10 +36,10 @@ public class User extends People {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    @Override
+    public String getNickname() {
+        return nickname;
     }
-
 
     public String getPassword() {
         return password;
@@ -48,11 +52,13 @@ public class User extends People {
 
     @Override
     public void showMenu(User user) {
-        System.out.println("Make your choice! If you want to see products list - press 1 " +
+        System.out.println("Make your choice! \n If you want to see products list - press 1 " +
                 "\n If you want to find the product - press 2 " +
-                "\n If you want to add the product into your order - press 3!" +
+                "\n If you want to add the product into your order - press 3" +
                 "\n If you want to remove the product from your order - press 4" +
-                "\n If you want to see your order - press 5!");
+                "\n If you want to see your order - press 5" +
+                "\n If you want to return into past menu - press 9!");
+
     }
 
     public void addUser() {
@@ -83,7 +89,7 @@ public class User extends People {
             }
         }
 
-        this.username = array[0];
+        this.nickname = array[0];
         this.password = array[1];
         this.name = array[2];
         this.lastName = array[3];
@@ -92,10 +98,15 @@ public class User extends People {
 
     }
 
-    public void showStartMenu() {
-        System.out.println("Hi, there! Welcome to the toy store! \n Make your choice! If you want to register new user press 1 " +
-                "\n If you want to login - press 2 " +
-                "\n If you want to login as admin - press 3!" +
-                "\n If you want to exit - press 4!");
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", isBlocked=" + isBlocked +
+                '}';
     }
 }
