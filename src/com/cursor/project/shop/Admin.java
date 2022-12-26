@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Admin extends People {
 
     Product product = new Product();
-    Toy toy;
+    Toy toy = new Toy();
     Book book;
     User user;
 
